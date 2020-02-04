@@ -9,14 +9,12 @@
  */
 defined('MOODLE_INTERNAL') || die;
 
-require_once 'locallib.php';
-require_once $CFG->dirroot . '/calendar/lib.php';
+require_once('locallib.php');
+require_once($CFG->dirroot . '/calendar/lib.php');
 
 function gotomeeting_add_instance($data, $mform = null) {
-
     global $USER, $DB;
     $response = createGoToMeeting($data);
-
     if ($response && $response->status == 201) {
         $data->userid = $USER->id;
         $data->timecreated = time();
@@ -98,20 +96,19 @@ function gotomeeting_supports($feature) {
  * this function will permanently delete the instance
  * and any data that depends on it.
  *
- * @param int $id Id of the module instance
+ * @param $gotomeeting
  * @return boolean Success/Failure
+ * @throws coding_exception
+ * @throws dml_exception
  */
 function gotomeeting_update_instance($gotomeeting) {
-
     global $DB;
     if (!$oldgotomeeting = $DB->get_record('gotomeeting', ['id' => $gotomeeting->instance])) {
         return false;
     }
-    $result = false;
     $result = updateGoToMeeting($oldgotomeeting, $gotomeeting);
 
     if ($result) {
-
         $oldgotomeeting->name = $gotomeeting->name;
         $oldgotomeeting->intro = $gotomeeting->intro;
         $oldgotomeeting->startdatetime = $gotomeeting->startdatetime;
@@ -122,9 +119,7 @@ function gotomeeting_update_instance($gotomeeting) {
             'groupid' => 0, 'modulename' => 'gotomeeting'];
 
         $eventid = $DB->get_field('event', 'id', $param);
-
         if (!empty($eventid)) {
-
             $event = new stdClass();
             $event->id = $eventid;
             $event->name = $gotomeeting->name;
@@ -156,12 +151,13 @@ function gotomeeting_update_instance($gotomeeting) {
  * (defined by the form in mod_form.php) this function
  * will update an existing instance with new data.
  *
- * @param object $adobeconnect An object from the form in mod_form.php
+ * @param $id
  * @return boolean Success/Fail
+ * @throws coding_exception
+ * @throws dml_exception
  */
 function gotomeeting_delete_instance($id) {
-    global $DB, $CFG;
-
+    global $DB;
     $result = false;
     if (!$gotomeeting = $DB->get_record('gotomeeting', ['id' => $id])) {
         return false;
@@ -200,15 +196,8 @@ function gotomeeting_delete_instance($id) {
     return $result;
 }
 
-/*
- *
- *
- *
- */
-
 function gotomeeting_get_completion_state($course, $cm, $userid, $type) {
-    global $CFG, $DB;
-    $result = $type;
+    global $DB;
     if (!($gotomeeting = $DB->get_record('gotomeeting', ['id' => $cm->instance]))) {
         throw new Exception("Can't find GoToLMS {$cm->instance}");
     }

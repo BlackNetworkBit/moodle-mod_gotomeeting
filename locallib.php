@@ -8,8 +8,8 @@
  * @license   http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
 function createGoToMeeting($gotomeeting) {
-    global $USER, $DB, $CFG;
-    require_once $CFG->dirroot . '/mod/gotomeeting/lib/OSD.php';
+    global $CFG;
+    require_once($CFG->dirroot . '/mod/gotomeeting/lib/OSD.php');
     $config = get_config('gotomeeting');
     OSD::setup(trim($config->consumer_key), trim($config->consumer_secret));
     OSD::authenticate_with_password(trim($config->userid), trim($config->password));
@@ -26,7 +26,6 @@ function createGoToMeeting($gotomeeting) {
     $attributes['timezonekey'] = get_user_timezone();
 
     $response = OSD::post("/G2M/rest/meetings", $attributes);
-
     if ($response && $response->status == 201) {
         return $response;
     }
@@ -34,9 +33,8 @@ function createGoToMeeting($gotomeeting) {
 }
 
 function updateGoToMeeting($oldgotomeeting, $gotomeeting) {
-    global $USER, $DB, $CFG;
+    global $CFG;
     require_once $CFG->dirroot . '/mod/gotomeeting/lib/OSD.php';
-    $result = false;
     $config = get_config('gotomeeting');
     OSD::setup(trim($config->consumer_key), trim($config->consumer_secret));
     OSD::authenticate_with_password(trim($config->userid), trim($config->password));
@@ -54,40 +52,30 @@ function updateGoToMeeting($oldgotomeeting, $gotomeeting) {
     $attributes['timezonekey'] = get_user_timezone();
 
     $response = OSD::request('PUT', "/G2M/rest/meetings/{$oldgotomeeting->gotomeetingid}", $attributes);
-
-    if ($response && $response->status == 204) {
-        $result = true;
-    }
-
-    return $result;
+    return $response && $response->status == 204;
 }
 
 function deleteGoToMeeting($gotowebinarid) {
     global $CFG;
-    require_once $CFG->dirroot . '/mod/gotomeeting/lib/OSD.php';
+    require_once($CFG->dirroot . '/mod/gotomeeting/lib/OSD.php');
     $config = get_config('gotomeeting');
     OSD::setup(trim($config->consumer_key), trim($config->consumer_secret));
     OSD::authenticate_with_password(trim($config->userid), trim($config->password));
 
-    $responce = OSD::request('DELETE', "/G2M/rest/meetings/{$gotowebinarid}");
-    if ($responce->status == 204) {
-        return true;
-    } else {
-        return false;
-    }
+    $response = OSD::request('DELETE', "/G2M/rest/meetings/{$gotowebinarid}");
+    return $response && $response->status == 204;
 }
 
 function get_gotomeeting($gotomeeting) {
-    global $USER, $DB, $CFG;
-    require_once $CFG->dirroot . '/mod/gotomeeting/lib/OSD.php';
-    $result = false;
+    global $CFG;
+    require_once($CFG->dirroot . '/mod/gotomeeting/lib/OSD.php');
     $context = context_course::instance($gotomeeting->course);
-    if (is_siteadmin() OR has_capability('mod/gotomeeting:organiser', $context) OR has_capability('mod/gotomeeting:presenter', $context)) {
+    if (is_siteadmin() || has_capability('mod/gotomeeting:organiser', $context) ||
+        has_capability('mod/gotomeeting:presenter', $context)) {
         $config = get_config('gotomeeting');
         OSD::setup(trim($config->consumer_key), trim($config->consumer_secret));
         OSD::authenticate_with_password(trim($config->userid), trim($config->password));
         $response = OSD::get("/G2M/rest/meetings/{$gotomeeting->gotomeetingid}/start");
-
         if ($response && $response->status == 200) {
             return json_decode($response->body)->hostURL;
         }
@@ -95,4 +83,5 @@ function get_gotomeeting($gotomeeting) {
         $meetinginfo = json_decode($gotomeeting->meetinfo);
         return $meetinginfo[0]->joinURL;
     }
+    return null;
 }

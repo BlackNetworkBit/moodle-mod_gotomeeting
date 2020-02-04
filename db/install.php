@@ -1,5 +1,4 @@
 <?php
-
 /**
  * GoToMeeting module install  file
  *

@@ -1,5 +1,4 @@
 <?php
-
 /**
  * GoToWebinar module view file
  *
@@ -11,31 +10,18 @@
 class restore_gotomeeting_activity_structure_step extends restore_activity_structure_step {
 
     protected function define_structure() {
-
-        $paths = [];
-        $userinfo = false;
-//        $userinfo = $this->get_setting_value('userinfo');
-
-        $paths[] = new restore_path_element('gotomeeting', '/activity/gotomeeting');
-        // $paths[] = new restore_path_element('gotomeeting_meeting_group', '/activity/gotomeeting/meeting_groups/meeting_group');
-//        if ($userinfo) {
-//            $paths[] = new restore_path_element('survey_answer', '/activity/survey/answers/answer');
-//            $paths[] = new restore_path_element('survey_analys', '/activity/survey/analysis/analys');
-//        }
-
-        // Return the paths wrapped into standard activity structure
+        $paths = [new restore_path_element('gotomeeting', '/activity/gotomeeting')];
         return $this->prepare_activity_structure($paths);
     }
 
     protected function process_gotomeeting($data) {
         global $DB;
-
         $data = (object)$data;
         $oldid = $data->id;
+
         $data->course = $this->get_courseid();
         $data->timemodified = $this->apply_date_offset($data->timemodified);
         $data->timecreated = $this->apply_date_offset($data->timecreated);
-
         // insert the gotomeeting record
         $newitemid = $DB->insert_record('gotomeeting', $data);
         // immediately after inserting "activity" record, call this

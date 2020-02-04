@@ -25,6 +25,7 @@ class gotomeeting_created extends \core\event\base {
      * Returns localised general event name.
      *
      * @return string
+     * @throws \coding_exception
      */
     public static function get_name() {
         return get_string('gotomeetingcreated', 'mod_gotomeeting');
@@ -44,6 +45,7 @@ class gotomeeting_created extends \core\event\base {
      * Get URL related to the action.
      *
      * @return \moodle_url
+     * @throws \moodle_exception
      */
     public function get_url() {
         return new \moodle_url("/mod/gotomeeting/view.php",

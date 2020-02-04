@@ -10,22 +10,19 @@ require('../../config.php');
 require_once($CFG->dirroot . '/mod/gotomeeting/locallib.php');
 require_once($CFG->dirroot . '/mod/gotomeeting/lib/OSD.php');
 require_once($CFG->libdir . '/completionlib.php');
-global $DB, $USER;
 $id = required_param('id', PARAM_INT); // Course Module ID
 
-if ($id) {
-    if (!$cm = get_coursemodule_from_id('gotomeeting', $id)) {
-        print_error('invalidcoursemodule');
-    }
-    $gotomeeting = $DB->get_record('gotomeeting', ['id' => $cm->instance], '*', MUST_EXIST);
+if ($id && !$cm = get_coursemodule_from_id('gotomeeting', $id)) {
+    print_error('invalidcoursemodule');
 }
-$course = $DB->get_record('course', ['id' => $cm->course], '*', MUST_EXIST);
-$meeturl = '';
 
+$gotomeeting = $DB->get_record('gotomeeting', ['id' => $cm->instance], '*', MUST_EXIST);
+$course = $DB->get_record('course', ['id' => $cm->course], '*', MUST_EXIST);
 $gotomeeting_joinurl = get_gotomeeting($gotomeeting);
 $meeturl = $gotomeeting;
-
 $meetinginfo = json_decode($gotomeeting->meetinfo);
+
+
 require_course_login($course, true, $cm);
 $context = context_module::instance($cm->id);
 require_capability('mod/gotomeeting:view', $context);
@@ -34,12 +31,12 @@ require_capability('mod/gotomeeting:view', $context);
 $PAGE->set_url('/mod/gotomeeting/view.php', ['id' => $cm->id]);
 $PAGE->set_title($course->shortname . ': ' . $gotomeeting->name);
 $PAGE->set_heading($course->fullname);
-
-
 $completion = new completion_info($course);
 $completion->set_module_viewed($cm);
+
 echo $OUTPUT->header();
 echo $OUTPUT->heading('Course:  ' . $course->fullname);
+
 $table = new html_table();
 $table->head = ['GoToWebinar'];
 $table->headspan = [2];

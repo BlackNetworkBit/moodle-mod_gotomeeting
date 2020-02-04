@@ -7,7 +7,7 @@
  * @license   http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
 require_once('../../config.php');
-require_once $CFG->dirroot . '/mod/gotomeeting/lib/OSD.php';
+require_once($CFG->dirroot . '/mod/gotomeeting/lib/OSD.php');
 
 $PAGE->set_context(context_system::instance());
 $PAGE->set_url(new moodle_url($CFG->wwwroot . '/mod/gotomeeting/configtest.php'));

@@ -25,6 +25,7 @@ class gotomeeting_updated extends \core\event\base {
      * Returns localised general event name.
      *
      * @return string
+     * @throws \coding_exception
      */
     public static function get_name() {
         return get_string('gotomeetingupdated', 'mod_gotomeeting');
@@ -44,9 +45,10 @@ class gotomeeting_updated extends \core\event\base {
      * Get URL related to the action.
      *
      * @return \moodle_url
+     * @throws \moodle_exception
      */
     public function get_url() {
-        return new \moodle_url("/course/modedit.php",
+        return new \moodle_url('/course/modedit.php',
             ['update' => $this->contextinstanceid]);
     }
 

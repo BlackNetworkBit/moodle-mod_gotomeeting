@@ -9,7 +9,7 @@
  * @license   http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
 defined('MOODLE_INTERNAL') || die;
-require_once $CFG->dirroot . '/mod/gotomeeting/backup/moodle2/backup_gotomeeting_stepslib.php';
+require_once($CFG->dirroot . '/mod/gotomeeting/backup/moodle2/backup_gotomeeting_stepslib.php');
 
 class backup_gotomeeting_activity_task extends backup_activity_task {
     protected function define_my_settings() {

@@ -1,6 +1,4 @@
 <?php
-
-
 /**
  * GoToWebinar module view file
  *
@@ -11,7 +9,7 @@
 
 defined('MOODLE_INTERNAL') || die();
 
-require_once($CFG->dirroot . '/mod/gotomeeting/backup/moodle2/restore_gotomeeting_stepslib.php'); // Because it exists (must)
+require_once($CFG->dirroot . '/mod/gotomeeting/backup/moodle2/restore_gotomeeting_stepslib.php');
 
 /**
  * survey restore task that provides all the settings and steps to perform one
@@ -39,10 +37,7 @@ class restore_gotomeeting_activity_task extends restore_activity_task {
      * processed by the link decoder
      */
     static public function define_decode_contents() {
-        $contents = [];
-
-        $contents[] = new restore_decode_content('gotomeeting', ['intro'], 'gotomeeting');
-
+        $contents = [new restore_decode_content('gotomeeting', ['intro'], 'gotomeeting')];
         return $contents;
     }
 
@@ -52,10 +47,8 @@ class restore_gotomeeting_activity_task extends restore_activity_task {
      */
     static public function define_decode_rules() {
         $rules = [];
-
         $rules[] = new restore_decode_rule('GOTOLMSVIEWBYID', '/mod/gotomeeting/view.php?id=$1', 'course_module');
         $rules[] = new restore_decode_rule('GOTOLMSINDEX', '/mod/gotomeeting/index.php?id=$1', 'course');
-
         return $rules;
 
     }
@@ -68,7 +61,6 @@ class restore_gotomeeting_activity_task extends restore_activity_task {
      */
     static public function define_restore_log_rules() {
         $rules = [];
-
         $rules[] = new restore_log_rule('gotomeeting', 'add', 'view.php?id={course_module}', '{gotomeeting}');
         $rules[] = new restore_log_rule('gotomeeting', 'update', 'view.php?id={course_module}', '{gotomeeting}');
         $rules[] = new restore_log_rule('gotomeeting', 'view', 'view.php?id={course_module}', '{gotomeeting}');
@@ -92,9 +84,7 @@ class restore_gotomeeting_activity_task extends restore_activity_task {
      * activity level. All them are rules not linked to any module instance (cmid = 0)
      */
     static public function define_restore_log_rules_for_course() {
-        $rules = [];
-
-        $rules[] = new restore_log_rule('gotomeeting', 'view all', 'index.php?id={course}', null);
+        $rules = [new restore_log_rule('gotomeeting', 'view all', 'index.php?id={course}', null)];
 
         return $rules;
     }

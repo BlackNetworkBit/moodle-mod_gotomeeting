@@ -10,8 +10,6 @@
 defined('MOODLE_INTERNAL') || die;
 
 if ($ADMIN->fulltree) {
-
-
     //----------------  Consumer Key Settings -----------------------------------------//
     $name = 'gotomeeting/consumer_key';
     $visiblename = get_string('gtm_consumer_key', 'gotomeeting');
