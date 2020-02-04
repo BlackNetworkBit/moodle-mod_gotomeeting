@@ -55,7 +55,7 @@ $table->head = ['GoToWebinar'];
 $table->headspan = [2];
 $table->size = ['30%', '70%'];
 
-$cell1 = new html_table_cell("Meeting Title");
+$cell1 = new html_table_cell(get_string('meetingtitle', 'mod_gotomeeting'));
 $cell1->colspan = 1;
 $cell1->style = 'text-align:left;';
 
@@ -64,7 +64,7 @@ $cell2->colspan = 1;
 $cell2->style = 'text-align:left;';
 $table->data[] = [$cell1, $cell2];
 
-$cell1 = new html_table_cell("Meeting Description");
+$cell1 = new html_table_cell(get_string('meetingdescription', 'mod_gotomeeting'));
 $cell1->colspan = 1;
 $cell1->style = 'text-align:left;';
 
@@ -75,7 +75,7 @@ $cell2->style = 'text-align:left;';
 $table->data[] = [$cell1, $cell2];
 
 
-$cell1 = new html_table_cell("Meeting start date and time");
+$cell1 = new html_table_cell(get_string('meetingstartenddate', 'mod_gotomeeting'));
 $cell1->colspan = 1;
 $cell1->style = 'text-align:left;';
 
@@ -86,7 +86,7 @@ $cell2->style = 'text-align:left;';
 $table->data[] = [$cell1, $cell2];
 
 
-$cell1 = new html_table_cell("Meeting end date and time");
+$cell1 = new html_table_cell(get_string('meetingenddateandtime', 'mod_gotomeeting'));
 $cell1->colspan = 1;
 $cell1->style = 'text-align:left;';
 
@@ -96,7 +96,8 @@ $cell2->style = 'text-align:left;';
 
 $table->data[] = [$cell1, $cell2];
 
-$cell2 = new html_table_cell(html_writer::link(trim($gotomeeting_joinurl, '"'), 'Join Meeting', ["target" => "_blank", 'class' => 'btn btn-primary']));
+$cell2 = new html_table_cell(html_writer::link(trim($gotomeeting_joinurl, '"'),
+    get_string('joinmeeting', 'mod_gotomeeting'), ["target" => "_blank", 'class' => 'btn btn-primary']));
 $cell2->colspan = 2;
 $cell2->style = 'text-align:center;';
 
