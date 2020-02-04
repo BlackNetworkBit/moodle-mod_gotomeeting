@@ -12,8 +12,7 @@ defined('MOODLE_INTERNAL') || die;
 if ($ADMIN->fulltree) {
 
 
-
-    //----------------  Consumer Key Settings -----------------------------------------//   
+    //----------------  Consumer Key Settings -----------------------------------------//
     $name = 'gotomeeting/consumer_key';
     $visiblename = get_string('gtm_consumer_key', 'gotomeeting');
     $description = get_string('gtm_consumer_key_desc', 'gotomeeting');
@@ -42,7 +41,7 @@ if ($ADMIN->fulltree) {
     $url = htmlentities($url, ENT_COMPAT, 'UTF-8');
     $options = 'toolbar=0,scrollbars=1,location=0,statusbar=0,menubar=0,resizable=0,width=700,height=300';
     $str = '<center><input type="button" onclick="window.open(\'' . $url . '\', \'\', \'' . $options . '\');" value="' .
-            get_string('testconnection', 'gotomeeting') . '" /></center>';
+        get_string('testconnection', 'gotomeeting') . '" /></center>';
     $settings->add(new admin_setting_heading('adobeconnect_test', '', $str));
 }
 

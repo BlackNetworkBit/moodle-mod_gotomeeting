@@ -6,6 +6,7 @@
  * @copyright  2017 Alok Kumar Rai <alokr.mail@gmail.com,alokkumarrai@outlook.in>
  * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
+
 namespace mod_gotomeeting\event;
 defined('MOODLE_INTERNAL') || die();
 
@@ -46,7 +47,7 @@ class gotomeeting_viewed extends \core\event\base {
      */
     public function get_url() {
         return new \moodle_url("/mod/gotomeeting/view.php",
-                array('id' => $this->objectid));
+            ['id' => $this->objectid]);
     }
 
     /**
@@ -55,7 +56,7 @@ class gotomeeting_viewed extends \core\event\base {
      * @return array|null
      */
     public function get_legacy_logdata() {
-        return array();
+        return [];
     }
 
     /**

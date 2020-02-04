@@ -17,9 +17,9 @@ if ($id) {
     if (!$cm = get_coursemodule_from_id('gotomeeting', $id)) {
         print_error('invalidcoursemodule');
     }
-    $gotomeeting = $DB->get_record('gotomeeting', array('id' => $cm->instance), '*', MUST_EXIST);
+    $gotomeeting = $DB->get_record('gotomeeting', ['id' => $cm->instance], '*', MUST_EXIST);
 }
-$course = $DB->get_record('course', array('id' => $cm->course), '*', MUST_EXIST);
+$course = $DB->get_record('course', ['id' => $cm->course], '*', MUST_EXIST);
 $meeturl = '';
 
 $gotomeeting_joinurl = get_gotomeeting($gotomeeting);
@@ -31,7 +31,7 @@ $context = context_module::instance($cm->id);
 require_capability('mod/gotomeeting:view', $context);
 
 
-$PAGE->set_url('/mod/gotomeeting/view.php', array('id' => $cm->id));
+$PAGE->set_url('/mod/gotomeeting/view.php', ['id' => $cm->id]);
 $PAGE->set_title($course->shortname . ': ' . $gotomeeting->name);
 $PAGE->set_heading($course->fullname);
 
@@ -41,9 +41,9 @@ $completion->set_module_viewed($cm);
 echo $OUTPUT->header();
 echo $OUTPUT->heading('Course:  ' . $course->fullname);
 $table = new html_table();
-$table->head = array('GoToWebinar');
-$table->headspan = array(2);
-$table->size = array('30%', '70%');
+$table->head = ['GoToWebinar'];
+$table->headspan = [2];
+$table->size = ['30%', '70%'];
 
 $cell1 = new html_table_cell("Meeting Title");
 $cell1->colspan = 1;
@@ -52,7 +52,7 @@ $cell1->style = 'text-align:left;';
 $cell2 = new html_table_cell("<b>" . $gotomeeting->name . "</b>");
 $cell2->colspan = 1;
 $cell2->style = 'text-align:left;';
-$table->data[] = array($cell1, $cell2);
+$table->data[] = [$cell1, $cell2];
 
 $cell1 = new html_table_cell("Meeting Description");
 $cell1->colspan = 1;
@@ -62,7 +62,7 @@ $cell2 = new html_table_cell("<b>" . strip_tags($gotomeeting->intro) . "</b>");
 $cell2->colspan = 1;
 $cell2->style = 'text-align:left;';
 
-$table->data[] = array($cell1, $cell2);
+$table->data[] = [$cell1, $cell2];
 
 
 $cell1 = new html_table_cell("Meeting start date and time");
@@ -73,7 +73,7 @@ $cell2 = new html_table_cell("<b>" . userdate($gotomeeting->startdatetime) . "</
 $cell2->colspan = 1;
 $cell2->style = 'text-align:left;';
 
-$table->data[] = array($cell1, $cell2);
+$table->data[] = [$cell1, $cell2];
 
 
 $cell1 = new html_table_cell("Meeting end date and time");
@@ -84,18 +84,16 @@ $cell2 = new html_table_cell("<b>" . userdate($gotomeeting->enddatetime) . "</b>
 $cell2->colspan = 1;
 $cell2->style = 'text-align:left;';
 
-$table->data[] = array($cell1, $cell2);
+$table->data[] = [$cell1, $cell2];
 
-$cell2 = new html_table_cell(html_writer::link(trim($gotomeeting_joinurl, '"'), 'Join Meeting', array("target" => "_blank", 'class' => 'btn btn-primary')));
+$cell2 = new html_table_cell(html_writer::link(trim($gotomeeting_joinurl, '"'), 'Join Meeting', ["target" => "_blank", 'class' => 'btn btn-primary']));
 $cell2->colspan = 2;
 $cell2->style = 'text-align:center;';
 
-$table->data[] = array($cell2);
-
+$table->data[] = [$cell2];
 
 
 echo html_writer::table($table);
-
 
 
 echo $OUTPUT->footer();

@@ -11,7 +11,6 @@ namespace mod_gotomeeting\event;
 defined('MOODLE_INTERNAL') || die();
 
 
-
 class gotomeeting_updated extends \core\event\base {
     /**
      * Init method
@@ -48,7 +47,7 @@ class gotomeeting_updated extends \core\event\base {
      */
     public function get_url() {
         return new \moodle_url("/course/modedit.php",
-                array('update' => $this->contextinstanceid));
+            ['update' => $this->contextinstanceid]);
     }
 
     /**
@@ -57,9 +56,9 @@ class gotomeeting_updated extends \core\event\base {
      * @return array|null
      */
     public function get_legacy_logdata() {
-        return array();
+        return [];
     }
-  
+
     /**
      * Custom validation.
      *

@@ -11,9 +11,9 @@ function createGoToMeeting($gotomeeting) {
     global $USER, $DB, $CFG;
     require_once $CFG->dirroot . '/mod/gotomeeting/lib/OSD.php';
     $config = get_config('gotomeeting');
-    OSD::setup(trim($config->consumer_key),trim($config->consumer_secret));
+    OSD::setup(trim($config->consumer_key), trim($config->consumer_secret));
     OSD::authenticate_with_password(trim($config->userid), trim($config->password));
-    $attributes = array();
+    $attributes = [];
     $dstoffset = dst_offset_on($gotomeeting->startdatetime, get_user_timezone());
     $attributes['subject'] = $gotomeeting->name;
     $startdate = usergetdate(usertime($gotomeeting->startdatetime - $dstoffset));
@@ -38,10 +38,10 @@ function updateGoToMeeting($oldgotomeeting, $gotomeeting) {
     require_once $CFG->dirroot . '/mod/gotomeeting/lib/OSD.php';
     $result = false;
     $config = get_config('gotomeeting');
-    OSD::setup(trim($config->consumer_key),trim($config->consumer_secret));
+    OSD::setup(trim($config->consumer_key), trim($config->consumer_secret));
     OSD::authenticate_with_password(trim($config->userid), trim($config->password));
 
-    $attributes = array();
+    $attributes = [];
     $attributes['subject'] = $gotomeeting->name;
     $dstoffset = dst_offset_on($gotomeeting->startdatetime, get_user_timezone());
     $startdate = usergetdate(usertime($gotomeeting->startdatetime - $dstoffset));
@@ -66,7 +66,7 @@ function deleteGoToMeeting($gotowebinarid) {
     global $CFG;
     require_once $CFG->dirroot . '/mod/gotomeeting/lib/OSD.php';
     $config = get_config('gotomeeting');
-    OSD::setup(trim($config->consumer_key),trim($config->consumer_secret));
+    OSD::setup(trim($config->consumer_key), trim($config->consumer_secret));
     OSD::authenticate_with_password(trim($config->userid), trim($config->password));
 
     $responce = OSD::request('DELETE', "/G2M/rest/meetings/{$gotowebinarid}");
@@ -84,7 +84,7 @@ function get_gotomeeting($gotomeeting) {
     $context = context_course::instance($gotomeeting->course);
     if (is_siteadmin() OR has_capability('mod/gotomeeting:organiser', $context) OR has_capability('mod/gotomeeting:presenter', $context)) {
         $config = get_config('gotomeeting');
-        OSD::setup(trim($config->consumer_key),trim($config->consumer_secret));
+        OSD::setup(trim($config->consumer_key), trim($config->consumer_secret));
         OSD::authenticate_with_password(trim($config->userid), trim($config->password));
         $response = OSD::get("/G2M/rest/meetings/{$gotomeeting->gotomeetingid}/start");
 

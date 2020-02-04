@@ -12,12 +12,12 @@ class restore_gotomeeting_activity_structure_step extends restore_activity_struc
 
     protected function define_structure() {
 
-        $paths = array();
+        $paths = [];
         $userinfo = false;
 //        $userinfo = $this->get_setting_value('userinfo');
 
         $paths[] = new restore_path_element('gotomeeting', '/activity/gotomeeting');
-       // $paths[] = new restore_path_element('gotomeeting_meeting_group', '/activity/gotomeeting/meeting_groups/meeting_group');
+        // $paths[] = new restore_path_element('gotomeeting_meeting_group', '/activity/gotomeeting/meeting_groups/meeting_group');
 //        if ($userinfo) {
 //            $paths[] = new restore_path_element('survey_answer', '/activity/survey/answers/answer');
 //            $paths[] = new restore_path_element('survey_analys', '/activity/survey/analysis/analys');
@@ -46,8 +46,8 @@ class restore_gotomeeting_activity_structure_step extends restore_activity_struc
         global $DB;
 
         $data = (object)$data;
-        $data->instanceid   = $this->get_new_parentid('gotomeeting');
-        $data->groupid      = $this->get_mappingid('instanceid', $data->instanceid);
+        $data->instanceid = $this->get_new_parentid('gotomeeting');
+        $data->groupid = $this->get_mappingid('instanceid', $data->instanceid);
 
         $newitemid = $DB->insert_record('gotomeeting_registrant', $data);
 
@@ -57,6 +57,6 @@ class restore_gotomeeting_activity_structure_step extends restore_activity_struc
 
     protected function after_execute() {
         // Add survey related files, no need to match by itemname (just internally handled context)
-       // $this->add_related_files('mod_gotomeeting', 'intro', null);
+        // $this->add_related_files('mod_gotomeeting', 'intro', null);
     }
 }

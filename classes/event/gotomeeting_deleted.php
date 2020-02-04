@@ -6,6 +6,7 @@
  * @copyright  2017 Alok Kumar Rai <alokr.mail@gmail.com,alokkumarrai@outlook.in>
  * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
+
 namespace mod_gotomeeting\event;
 defined('MOODLE_INTERNAL') || die();
 
@@ -46,7 +47,7 @@ class gotomeeting_deleted extends \core\event\base {
      */
     public function get_url() {
         return new \moodle_url("/mod/glossary/editcategories.php",
-                array('id' => $this->contextinstanceid));
+            ['id' => $this->contextinstanceid]);
     }
 
     /**
@@ -55,9 +56,9 @@ class gotomeeting_deleted extends \core\event\base {
      * @return array|null
      */
     public function get_legacy_logdata() {
-        return array($this->courseid, 'glossary', 'delete category',
+        return [$this->courseid, 'glossary', 'delete category',
             "editcategories.php?id={$this->contextinstanceid}",
-            $this->objectid, $this->contextinstanceid);
+            $this->objectid, $this->contextinstanceid];
     }
 
     /**

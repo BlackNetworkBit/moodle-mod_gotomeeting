@@ -14,7 +14,7 @@ $PAGE->set_url(new moodle_url($CFG->wwwroot . '/mod/gotomeeting/configtest.php')
 $PAGE->set_pagelayout('admin');
 $PAGE->set_heading('GoToMeeting config test report');
 $PAGE->set_title('GoToMeeting config test report');
- require_login();      
+require_login();
 echo $OUTPUT->header();
 if (!is_siteadmin()) {
     print_error('nopermissions', 'gotomeeting', '', null);
@@ -44,12 +44,12 @@ if (isset($gotomeetingconfig->password) && $gotomeetingconfig->password == '') {
     echo html_writer::div('GoToMeeting password missing', 'alert alert-danger');
 }
 if ($validconsumerkey && $validuserid && $validpassword && $validconsumersecret) {
-   
-    OSD::setup(trim($gotomeetingconfig->consumer_key),trim($gotomeetingconfig->consumer_secret));
+
+    OSD::setup(trim($gotomeetingconfig->consumer_key), trim($gotomeetingconfig->consumer_secret));
     if (OSD::authenticate_with_password(trim($gotomeetingconfig->userid), trim($gotomeetingconfig->password))) {
         $auth = OSD::$oauth;
         $content = 'Authentication successfull with '
-                . '  organizer_key:  ' . $auth->organizer_key;
+            . '  organizer_key:  ' . $auth->organizer_key;
         echo html_writer::div($content, 'alert alert-success');
     } else {
         echo html_writer::div(OSD::$last_response->body, 'alert alert-danger');

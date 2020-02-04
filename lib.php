@@ -45,11 +45,11 @@ function gotomeeting_add_instance($data, $mform = null) {
         }
 
 
-        $event = \mod_gotomeeting\event\gotomeeting_created::create(array(
-                    'objectid' => $data->id,
-                    'context' => context_module::instance($data->coursemodule),
-                    'other' => array('modulename' => $data->name, 'startdatetime' => $data->startdatetime),
-        ));
+        $event = \mod_gotomeeting\event\gotomeeting_created::create([
+            'objectid' => $data->id,
+            'context' => context_module::instance($data->coursemodule),
+            'other' => ['modulename' => $data->name, 'startdatetime' => $data->startdatetime],
+        ]);
         $event->trigger();
 
         return $data->id;
@@ -70,16 +70,26 @@ function gotomeeting_add_instance($data, $mform = null) {
  */
 function gotomeeting_supports($feature) {
     switch ($feature) {
-        case FEATURE_GROUPS: return false;
-        case FEATURE_GROUPINGS: return false;
-        case FEATURE_GROUPMEMBERSONLY: return false;
-        case FEATURE_MOD_INTRO: return true;
-        case FEATURE_COMPLETION_TRACKS_VIEWS: return true;
-        case FEATURE_GRADE_HAS_GRADE: return false;
-        case FEATURE_GRADE_OUTCOMES: return false;
-        case FEATURE_BACKUP_MOODLE2: return true;
-        case FEATURE_COMPLETION_HAS_RULES: return false;
-        default: return null;
+        case FEATURE_GROUPS:
+            return false;
+        case FEATURE_GROUPINGS:
+            return false;
+        case FEATURE_GROUPMEMBERSONLY:
+            return false;
+        case FEATURE_MOD_INTRO:
+            return true;
+        case FEATURE_COMPLETION_TRACKS_VIEWS:
+            return true;
+        case FEATURE_GRADE_HAS_GRADE:
+            return false;
+        case FEATURE_GRADE_OUTCOMES:
+            return false;
+        case FEATURE_BACKUP_MOODLE2:
+            return true;
+        case FEATURE_COMPLETION_HAS_RULES:
+            return false;
+        default:
+            return null;
     }
 }
 
@@ -94,7 +104,7 @@ function gotomeeting_supports($feature) {
 function gotomeeting_update_instance($gotomeeting) {
 
     global $DB;
-    if (!$oldgotomeeting = $DB->get_record('gotomeeting', array('id' => $gotomeeting->instance))) {
+    if (!$oldgotomeeting = $DB->get_record('gotomeeting', ['id' => $gotomeeting->instance])) {
         return false;
     }
     $result = false;
@@ -108,8 +118,8 @@ function gotomeeting_update_instance($gotomeeting) {
         $oldgotomeeting->enddatetime = $gotomeeting->enddatetime;
         $oldgotomeeting->timemodified = time();
         $DB->update_record('gotomeeting', $oldgotomeeting);
-        $param = array('courseid' => $gotomeeting->course, 'instance' => $gotomeeting->instance,
-            'groupid' => 0, 'modulename' => 'gotomeeting');
+        $param = ['courseid' => $gotomeeting->course, 'instance' => $gotomeeting->instance,
+            'groupid' => 0, 'modulename' => 'gotomeeting'];
 
         $eventid = $DB->get_field('event', 'id', $param);
 
@@ -132,11 +142,11 @@ function gotomeeting_update_instance($gotomeeting) {
             $calendarevent->update($event);
         }
     }
-    $event = \mod_gotomeeting\event\gotomeeting_updated::create(array(
-                'objectid' => $gotomeeting->instance,
-                'context' => context_module::instance($gotomeeting->coursemodule),
-                'other' => array('modulename' => $gotomeeting->name, 'startdatetime' => $gotomeeting->startdatetime),
-    ));
+    $event = \mod_gotomeeting\event\gotomeeting_updated::create([
+        'objectid' => $gotomeeting->instance,
+        'context' => context_module::instance($gotomeeting->coursemodule),
+        'other' => ['modulename' => $gotomeeting->name, 'startdatetime' => $gotomeeting->startdatetime],
+    ]);
     $event->trigger();
     return $result;
 }
@@ -153,7 +163,7 @@ function gotomeeting_delete_instance($id) {
     global $DB, $CFG;
 
     $result = false;
-    if (!$gotomeeting = $DB->get_record('gotomeeting', array('id' => $id))) {
+    if (!$gotomeeting = $DB->get_record('gotomeeting', ['id' => $id])) {
         return false;
     }
 
@@ -163,44 +173,43 @@ function gotomeeting_delete_instance($id) {
     $context = context_module::instance($cm->id);
 
     if (deleteGoToMeeting($gotomeeting->gotomeetingid)) {
-        $params = array('id' => $gotomeeting->id);
+        $params = ['id' => $gotomeeting->id];
         $result = $DB->delete_records('gotomeeting', $params);
     }
-      
+
     // Delete calendar  event
-    $param = array('courseid' => $gotomeeting->course, 'instance' => $gotomeeting->id,
-        'groupid' => 0, 'modulename' => 'gotomeeting');
+    $param = ['courseid' => $gotomeeting->course, 'instance' => $gotomeeting->id,
+        'groupid' => 0, 'modulename' => 'gotomeeting'];
 
     $eventid = $DB->get_field('event', 'id', $param);
     if ($eventid) {
         $calendarevent = calendar_event::load($eventid);
         $calendarevent->delete();
     }
-      
-    $event = \mod_gotomeeting\event\gotomeeting_deleted::create(array(
-                'objectid' => $id,
-                'context' => $context,
-                'other' => array('modulename' => $gotomeeting->name, 'startdatetime' => $gotomeeting->startdatetime),
-    ));
+
+    $event = \mod_gotomeeting\event\gotomeeting_deleted::create([
+        'objectid' => $id,
+        'context' => $context,
+        'other' => ['modulename' => $gotomeeting->name, 'startdatetime' => $gotomeeting->startdatetime],
+    ]);
 
 
     $event->trigger();
 
-     
 
     return $result;
 }
 
 /*
- * 
- * 
- * 
+ *
+ *
+ *
  */
 
 function gotomeeting_get_completion_state($course, $cm, $userid, $type) {
     global $CFG, $DB;
     $result = $type;
-    if (!($gotomeeting = $DB->get_record('gotomeeting', array('id' => $cm->instance)))) {
+    if (!($gotomeeting = $DB->get_record('gotomeeting', ['id' => $cm->instance]))) {
         throw new Exception("Can't find GoToLMS {$cm->instance}");
     }
     return true;

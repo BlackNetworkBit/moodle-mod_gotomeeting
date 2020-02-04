@@ -10,8 +10,8 @@
  */
 defined('MOODLE_INTERNAL') || die;
 
-require_once ($CFG->dirroot . '/course/moodleform_mod.php');
-require_once ($CFG->dirroot . '/mod/gotomeeting/locallib.php');
+require_once($CFG->dirroot . '/course/moodleform_mod.php');
+require_once($CFG->dirroot . '/mod/gotomeeting/locallib.php');
 
 class mod_gotomeeting_mod_form extends moodleform_mod {
 
@@ -27,13 +27,9 @@ class mod_gotomeeting_mod_form extends moodleform_mod {
         // $this->standard_intro_elements(get_string('gotomeetingintro', 'gotomeeting'));
         // Adding a new text editor
         $this->add_intro_editor(true, get_string('gotomeetingintro', 'gotomeeting'));
-        
-        
+
+
         $mform->addElement('header', 'meetingheader', get_string('meetingheader', 'gotomeeting'));
-
-
-       
-
 
 
         $mform->addElement('date_time_selector', 'startdatetime', get_string('startdatetime', 'gotomeeting'));
@@ -65,20 +61,20 @@ class mod_gotomeeting_mod_form extends moodleform_mod {
     }
 
     function add_completion_rules() {
-        $mform = & $this->_form;
+        $mform = &$this->_form;
 
-       /* $group = array();
-        $group[] = & $mform->createElement('checkbox', 'completionparticipationenabled', '', get_string('completiongotomeeting', 'mod_gotomeeting'));
-        $group[] = & $mform->createElement('text', 'completionparticipation', '', array('size' => 3, 'value' => 50));
-        $mform->setType('completionparticipation', PARAM_INT);
-        $mform->addGroup($group, 'completiongotomeetinggroup', get_string('completiongotomeetinggroup', 'mod_gotomeeting'), array(' '), false);
-        $mform->addHelpButton('completiongotomeetinggroup', 'completiongotomeetinggroup', 'gotomeeting');
-        $mform->disabledIf('completionparticipationenabled', 'meetingtype', 'eq', 'gotomeeting');
-        $mform->disabledIf('completionparticipation', 'meetingtype', 'eq', 'gotomeeting');
-        $mform->disabledIf('completionparticipation', 'completionparticipationenabled', 'notchecked');
+        /* $group = array();
+         $group[] = & $mform->createElement('checkbox', 'completionparticipationenabled', '', get_string('completiongotomeeting', 'mod_gotomeeting'));
+         $group[] = & $mform->createElement('text', 'completionparticipation', '', array('size' => 3, 'value' => 50));
+         $mform->setType('completionparticipation', PARAM_INT);
+         $mform->addGroup($group, 'completiongotomeetinggroup', get_string('completiongotomeetinggroup', 'mod_gotomeeting'), array(' '), false);
+         $mform->addHelpButton('completiongotomeetinggroup', 'completiongotomeetinggroup', 'gotomeeting');
+         $mform->disabledIf('completionparticipationenabled', 'meetingtype', 'eq', 'gotomeeting');
+         $mform->disabledIf('completionparticipation', 'meetingtype', 'eq', 'gotomeeting');
+         $mform->disabledIf('completionparticipation', 'completionparticipationenabled', 'notchecked');
 
-        return array('completiongotomeetinggroup');*/
-        return array();
+         return array('completiongotomeetinggroup');*/
+        return [];
     }
 
     function completion_rule_enabled($data) {
@@ -103,9 +99,9 @@ class mod_gotomeeting_mod_form extends moodleform_mod {
 
 
         if ($course->format == 'weeks') {
-         
+
             $dates = course_get_format($course)->get_section_dates($this->current->section);
-         
+
             if (($data['startdatetime'] < $dates->start) || ($data['startdatetime'] > $dates->end)) {
                 $errors['startdatetime'] = "Start date must be in the range of the course week";
             }
@@ -116,30 +112,30 @@ class mod_gotomeeting_mod_form extends moodleform_mod {
         }
         //
 
-         if (!empty($data['completionunlocked']) && (!empty($data['completionparticipationenabled']))) {
-        // Turn off completion settings if the checkboxes aren't ticked
-        $autocompletion = !empty($data['completion']) && $data['completion']==COMPLETION_TRACKING_AUTOMATIC;
-        if ($autocompletion && ($data['completionparticipation']>100 || $data['completionparticipation']<=0)) {
-         $errors['completiongotomeetinggroup'] ='Please enter a valid percentage value between 1 and 100'; 
+        if (!empty($data['completionunlocked']) && (!empty($data['completionparticipationenabled']))) {
+            // Turn off completion settings if the checkboxes aren't ticked
+            $autocompletion = !empty($data['completion']) && $data['completion'] == COMPLETION_TRACKING_AUTOMATIC;
+            if ($autocompletion && ($data['completionparticipation'] > 100 || $data['completionparticipation'] <= 0)) {
+                $errors['completiongotomeetinggroup'] = 'Please enter a valid percentage value between 1 and 100';
+            }
+
         }
-        
-    }
         return $errors;
     }
 
- function get_data() {
-    $data = parent::get_data();
-    if (!$data) {
+    function get_data() {
+        $data = parent::get_data();
+        if (!$data) {
+            return $data;
+        }
+        if (!empty($data->completionunlocked)) {
+            // Turn off completion settings if the checkboxes aren't ticked
+            $autocompletion = !empty($data->completion) && $data->completion == COMPLETION_TRACKING_AUTOMATIC;
+            if (empty($data->completionparticipationenabled) || !$autocompletion) {
+                $data->completionparticipation = 0;
+            }
+        }
         return $data;
     }
-    if (!empty($data->completionunlocked)) {
-        // Turn off completion settings if the checkboxes aren't ticked
-        $autocompletion = !empty($data->completion) && $data->completion==COMPLETION_TRACKING_AUTOMATIC;
-        if (empty($data->completionparticipationenabled) || !$autocompletion) {
-           $data->completionparticipation = 0;
-        }
-    }
-    return $data;
-}
-    
+
 }
