@@ -51,7 +51,7 @@ echo $OUTPUT->header();
 echo $OUTPUT->heading('Course:  ' . $course->fullname);
 
 $table = new html_table();
-$table->head = ['GoToWebinar'];
+$table->head = [get_string('pluginname', 'mod_gotomeeting')];
 $table->headspan = [2];
 $table->size = ['30%', '70%'];
 
